@@ -1,0 +1,35 @@
+$ docker run -e "SPRING_PROFILES_ACTIVE=docker" -p 8380:8380 -t reference-project/discovery-microservice 
+
+$ docker run -e "SPRING_PROFILES_ACTIVE=docker" -p 8381:8381 -t reference-project/config-microservice  
+
+$ docker run -e "SPRING_PROFILES_ACTIVE=docker" -p 8386:8386 -t reference-project/catalogue-microservice
+
+$ docker run -e "SPRING_PROFILES_ACTIVE=docker" -p 10000:10000 -t reference-project/api-gateway-microservice 
+
+$ docker run -e "SPRING_PROFILES_ACTIVE=docker" -p 7979:7979 -t reference-project/hystrix-dashboard
+
+ 
+
+$ docker images
+REPOSITORY                                   TAG                 IMAGE ID            CREATED             SIZE
+reference-project/catalogue-microservice     latest              e85a04bd2eb7        40 minutes ago      746MB
+reference-project/hystrix-dashboard          latest              be4c9047084c        40 minutes ago      699MB
+reference-project/api-gateway-microservice   latest              1210974a8c41        41 minutes ago      719MB
+reference-project/config-microservice        latest              1356390eee29        41 minutes ago      721MB
+reference-project/discovery-microservice     latest              91db0e3f2bea        41 minutes ago      723MB
+
+
+$ docker ps
+CONTAINER ID        IMAGE                                        COMMAND                  CREATED             STATUS              PORTS                      NAMES
+05fb9d2a365b        reference-project/hystrix-dashboard          "java -Djava.secur..."   5 minutes ago       Up 5 minutes        0.0.0.0:7979->7979/tcp     friendly_mcnulty
+a9b0f182d83d        reference-project/api-gateway-microservice   "java -Djava.secur..."   6 minutes ago       Up 6 minutes        0.0.0.0:10000->10000/tcp   silly_turing
+1c87a5e4d6b9        reference-project/catalogue-microservice     "java -Djava.secur..."   7 minutes ago       Up 7 minutes        0.0.0.0:8386->8386/tcp     festive_almeida
+44e762193a69        reference-project/config-microservice        "java -Djava.secur..."   8 minutes ago       Up 8 minutes        0.0.0.0:8381->8381/tcp     blissful_joliot
+e4b9a8c9f413        reference-project/discovery-microservice     "java -Djava.secur..."   9 minutes ago       Up 9 minutes        0.0.0.0:8380->8380/tcp     vigorous_chandrasekhar
+
+
+docker stop 05fb9d2a365b a9b0f182d83d 44e762193a69 1c87a5e4d6b9 e4b9a8c9f413
+
+docker rm 05fb9d2a365b a9b0f182d83d 44e762193a69 1c87a5e4d6b9 e4b9a8c9f413
+
+docker rmi e85a04bd2eb7 be4c9047084c 1210974a8c41 1356390eee29 91db0e3f2bea

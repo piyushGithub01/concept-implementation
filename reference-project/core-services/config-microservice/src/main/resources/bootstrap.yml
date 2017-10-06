@@ -1,0 +1,81 @@
+spring:
+  profiles:
+    active: dev
+---
+spring:
+  profiles: dev
+  application:
+    name: configserver
+  cloud:
+    config:
+      server:
+        git:
+          uri: file://C:/work/workspaces/eclipse_workspace02/reference-project/core-services/config-microservice/src/main/resources/config
+encrypt:
+  failOnError: false
+eureka:
+  instance:
+    statusPageUrlPath: ${management.context-path}/info
+    healthCheckUrlPath: ${management.context-path}/health
+    hostname: configserver
+    nonSecurePort: 80
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://localhost:8380/eureka/
+info:
+  description: Config Server
+---
+spring:
+  profiles: cloud
+  application:
+    name: configserver
+  cloud:
+    config:
+      server:
+        cloud:
+          search-locations: classpath:/config
+encrypt:
+  failOnError: false
+eureka:
+  instance:
+    statusPageUrlPath: ${management.context-path}/info
+    healthCheckUrlPath: ${management.context-path}/health
+    hostname: config-99.cfapps.io
+    nonSecurePort: 80
+    metadataMap:
+      instanceId: ${vcap.application.instance_id:${spring.application.name}:${spring.application.instance_id:${server.port}}}
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://discovery-77.cfapps.io/eureka/
+info:
+  description: Config Server
+---
+spring:
+  profiles: docker
+  application:
+    name: configserver
+  cloud:
+    config:
+      server:
+        docker:
+          search-locations: classpath:/config
+encrypt:
+  failOnError: false
+eureka:
+  instance:
+    statusPageUrlPath: ${management.context-path}/info
+    healthCheckUrlPath: ${management.context-path}/health
+    hostname: configserver
+    preferIpAddress: true
+    defaultZone: http://192.168.99.100:8380/eureka/
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://192.168.99.100:8380/eureka/
+info:
+  description: Config Server

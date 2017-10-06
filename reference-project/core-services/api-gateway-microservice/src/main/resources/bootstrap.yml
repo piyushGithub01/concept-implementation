@@ -1,0 +1,38 @@
+spring:
+  profiles:
+    active: dev
+---
+
+spring:
+  profiles: dev
+  application:
+    name: gateway
+  cloud:
+    config:
+      uri: http://localhost:8381
+encrypt:
+  failOnError: false
+
+---
+
+spring:
+  profiles: cloud
+  application:
+    name: gateway
+  cloud:
+    config:
+      uri: http://config-99.cfapps.io/
+encrypt:
+  failOnError: false
+
+---
+
+spring:
+  profiles: docker
+  application:
+    name: gateway
+  cloud:
+    config:
+      uri: http://configserver:8381
+encrypt:
+  failOnError: false

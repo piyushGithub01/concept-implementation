@@ -1,0 +1,76 @@
+spring:
+  profiles:
+    active: dev
+---
+
+spring:
+  profiles: dev
+server:
+  port: 7979
+endpoints:
+  restart:
+    enabled: true
+  shutdown:
+    enabled: true
+  health:
+    sensitive: false
+eureka:
+  instance:
+    hostname: hystrixdashboard
+    nonSecurePort: 80
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://localhost:8380/eureka/
+    
+---
+
+spring:
+  profiles: cloud
+server:
+  port: 7979
+endpoints:
+  restart:
+    enabled: true
+  shutdown:
+    enabled: true
+  health:
+    sensitive: false
+eureka:
+  instance:
+    hostname: hystrixdashboard
+    nonSecurePort: 80
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://discovery-77.cfapps.io/eureka/
+    
+---
+
+spring:
+  profiles: docker
+server:
+  port: 7979
+endpoints:
+  restart:
+    enabled: true
+  shutdown:
+    enabled: true
+  health:
+    sensitive: false
+eureka:
+  instance:
+    hostname: hystrixdashboard
+    nonSecurePort: 80
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://192.168.99.100:8380/eureka/
+  
+logging:
+  level:
+    ROOT: INFO
+    org.springframework.web: DEBUG

@@ -1,0 +1,48 @@
+spring:
+  profiles:
+    active: dev
+---
+spring:
+  profiles:
+    name: dev
+  cloud:
+    config:
+      discovery:
+        enabled: true
+      server:
+        git:
+          uri: file://C:/work/workspaces/eclipse_workspace02/reference-project/core-services/config-microservice/src/main/resources/config
+server:
+  port: 8381
+info:
+  description: Config Server
+---
+spring:
+  profiles:
+    name: cloud
+  cloud:
+    config:
+      discovery:
+        enabled: true
+      server:
+        cloud:
+          search-locations: classpath:/config
+server:
+  port: 8381
+info:
+  description: Config Server
+---
+spring:
+  profiles:
+    name: docker
+  cloud:
+    config:
+      discovery:
+        enabled: true
+      server:
+        docker:
+          search-locations: classpath:/config
+server:
+  port: 8381
+info:
+  description: Config Server

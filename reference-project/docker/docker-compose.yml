@@ -1,0 +1,49 @@
+--- 
+discovery:
+  image: reference-Project/discovery-microservice
+  hostname: discovery
+  ports:
+    - "8380:8380"
+  environment:
+    - SPRING_PROFILES_ACTIVE=docker
+configserver:
+  image: reference-Project/config-microservice
+  hostname: configServer
+  links:
+    - discovery
+  ports:
+    - "8381:8381"
+  environment:
+    - SPRING_PROFILES_ACTIVE=docker
+gateway:
+  image: reference-Project/api-gateway-microservice
+  hostname: gateway
+  links:
+    - discovery
+    - configserver
+    - catalogue
+  ports:
+    - "10000:10000"
+  environment:
+    - SPRING_PROFILES_ACTIVE=docker
+catalogue:
+  hostname: catalogue
+  image: reference-Project/catalogue-microservice
+  links:
+    - discovery
+    - configserver
+  ports:
+    - "8386:8386"
+  environment:
+    - SPRING_PROFILES_ACTIVE=docker
+hystrixdashboard:
+  image: reference-Project/hystrix-dashboard
+  links:
+    - discovery
+    - configserver
+    - catalogue
+    - gateway
+  ports:
+    - "7979:7979"
+  environment:
+    - SPRING_PROFILES_ACTIVE=docker
