@@ -34,7 +34,7 @@
 		</dependency>
     </dependencies>
     
-    <!-- <build>
+    <build>
 		<plugins>
 			<plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -63,7 +63,7 @@
                     <imageName>${docker.image.prefix}/${project.artifactId}</imageName>
                     <dockerDirectory>${project.basedir}/src/main/docker</dockerDirectory>
                     <dockerHost>https://192.168.99.100:2376</dockerHost>
-					<dockerCertPath>C:\Users\PTHAKKA\.docker\machine\machines\default</dockerCertPath>
+					<dockerCertPath>C:\Users\PIYUSH THAKKAR\.docker\machine\machines\default</dockerCertPath>
                     <resources>
                         <resource>
                             <targetPath>/</targetPath>
@@ -74,6 +74,6 @@
                 </configuration>
             </plugin>
 		</plugins>
-	</build> -->
+	</build>
 	
 </project>

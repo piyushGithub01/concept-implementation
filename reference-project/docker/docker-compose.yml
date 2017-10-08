@@ -1,49 +1,105 @@
---- 
-discovery:
-  image: reference-Project/discovery-microservice
-  hostname: discovery
-  ports:
-    - "8380:8380"
-  environment:
-    - SPRING_PROFILES_ACTIVE=docker
-configserver:
-  image: reference-Project/config-microservice
-  hostname: configServer
-  links:
-    - discovery
-  ports:
-    - "8381:8381"
-  environment:
-    - SPRING_PROFILES_ACTIVE=docker
-gateway:
-  image: reference-Project/api-gateway-microservice
-  hostname: gateway
-  links:
-    - discovery
-    - configserver
-    - catalogue
-  ports:
-    - "10000:10000"
-  environment:
-    - SPRING_PROFILES_ACTIVE=docker
-catalogue:
-  hostname: catalogue
-  image: reference-Project/catalogue-microservice
-  links:
-    - discovery
-    - configserver
-  ports:
-    - "8386:8386"
-  environment:
-    - SPRING_PROFILES_ACTIVE=docker
-hystrixdashboard:
-  image: reference-Project/hystrix-dashboard
-  links:
-    - discovery
-    - configserver
-    - catalogue
-    - gateway
-  ports:
-    - "7979:7979"
-  environment:
-    - SPRING_PROFILES_ACTIVE=docker
+version: "3"
+services:
+  discovery:
+    # replace username/repo:tag with your name and image details
+    image: piyushdocker01/ref-discovery:0.0.1
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      resources:
+        limits:
+          cpus: "0.1"
+          memory: 50M
+    ports:
+      - "8380:8380"
+    networks:
+      - webnet
+    hostname: discovery
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+  configserver:
+    # replace username/repo:tag with your name and image details
+    image: piyushdocker01/ref-config:0.0.1
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      resources:
+        limits:
+          cpus: "0.1"
+          memory: 50M
+    ports:
+      - "8381:8381"
+    networks:
+      - webnet
+    hostname: configserver
+    environment:
+      - SPRING_PROFILES_ACTIVE=
+  gateway:
+    # replace username/repo:tag with your name and image details
+    image: piyushdocker01/ref-gateway:0.0.1
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      resources:
+        limits:
+          cpus: "0.1"
+          memory: 50M
+    ports:
+      - "10000:10000"
+    networks:
+      - webnet
+    hostname: gateway
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+  hystrixdashboard:
+    # replace username/repo:tag with your name and image details
+    image: piyushdocker01/ref-hystrix:0.0.1
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      resources:
+        limits:
+          cpus: "0.1"
+          memory: 50M
+    ports:
+      - "7979:7979"
+    networks:
+      - webnet
+    hostname: hystrixboard
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+  catalogue:
+    # replace username/repo:tag with your name and image details
+    image: piyushdocker01/ref-catalogue:0.0.2
+    deploy:
+      replicas: 2
+      restart_policy:
+        condition: on-failure
+      resources:
+        limits:
+          cpus: "0.1"
+          memory: 150M
+    ports:
+      - "8386:8386"
+    networks:
+      - webnet
+    hostname: catalogue
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+  visualizer:
+    image: dockersamples/visualizer:stable
+    ports:
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+    networks:
+      - webnet
+networks:
+  webnet:

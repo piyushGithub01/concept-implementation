@@ -1,0 +1,203 @@
+REPOSITORY                                   TAG                 IMAGE ID            CREATED              SIZE
+reference-project/catalogue-microservice     latest              fdb1e5b98957        About a minute ago   750 MB
+reference-project/hystrix-dashboard          latest              1ea38b7023d4        2 minutes ago        705 MB
+reference-project/api-gateway-microservice   latest              b9b13ae4fbf9        3 minutes ago        719 MB
+reference-project/config-microservice        latest              3fd80886727b        4 minutes ago        721 MB
+reference-project/discovery-microservice     latest              477dab71c313        5 minutes ago        723 MB
+
+
+$ docker run -e "SPRING_PROFILES_ACTIVE=docker" -p 8380:8380 -t reference-project/discovery-microservice 
+
+$ docker run -e "SPRING_PROFILES_ACTIVE=docker" -p 8381:8381 -t reference-project/config-microservice  
+
+$ docker run -e "SPRING_PROFILES_ACTIVE=docker" -p 8386:8386 -t reference-project/catalogue-microservice
+
+$ docker run -e "SPRING_PROFILES_ACTIVE=docker" -p 10000:10000 -t reference-project/api-gateway-microservice 
+
+$ docker run -e "SPRING_PROFILES_ACTIVE=docker" -p 7979:7979 -t reference-project/hystrix-dashboard
+
+
+
+docker tag reference-project/discovery-microservice piyushdocker01/ref-discovery:0.0.1
+
+docker tag reference-project/config-microservice piyushdocker01/ref-config:0.0.1
+
+docker tag reference-project/catalogue-microservice piyushdocker01/ref-catalogue:0.0.1
+
+docker tag reference-project/api-gateway-microservice piyushdocker01/ref-gateway:0.0.1
+
+docker tag reference-project/hystrix-dashboard piyushdocker01/ref-hystrix:0.0.1
+
+
+docker login
+
+docker push piyushdocker01/ref-discovery:0.0.1
+
+docker push piyushdocker01/ref-config:0.0.1
+
+docker push piyushdocker01/ref-catalogue:0.0.1
+
+docker push piyushdocker01/ref-gateway:0.0.1
+
+docker push piyushdocker01/ref-hystrix:0.0.1
+
+
+
+
+$ docker run -e "SPRING_PROFILES_ACTIVE=docker" -p 8380:8380 -t piyushdocker01/ref-discovery:0.0.1 
+
+$ docker run -e "SPRING_PROFILES_ACTIVE=docker" -p 8381:8381 -t piyushdocker01/ref-config:0.0.1  
+
+$ docker run -e "SPRING_PROFILES_ACTIVE=docker" -p 8386:8386 -t piyushdocker01/ref-catalogue:0.0.1
+
+$ docker run -e "SPRING_PROFILES_ACTIVE=docker" -p 10000:10000 -t piyushdocker01/ref-gateway:0.0.1 
+
+$ docker run -e "SPRING_PROFILES_ACTIVE=docker" -p 7979:7979 -t piyushdocker01/ref-hystrix:0.0.1
+
+
+
+creating swarm
+
+docker-machine create --driver virtualbox myvm1
+docker-machine create --driver virtualbox myvm2
+
+
+$ docker-machine ls
+NAME      ACTIVE   DRIVER       STATE     URL                         SWARM   DOCKER        ERRORS
+default   *        virtualbox   Running   tcp://192.168.99.100:2376           v17.03.1-ce
+myvm1     -        virtualbox   Running   tcp://192.168.99.101:2376           v17.09.0-ce
+myvm2     -        virtualbox   Running   tcp://192.168.99.102:2376           v17.09.0-ce
+
+
+$ docker-machine ssh myvm1 "docker swarm init --advertise-addr 192.168.99.101"
+
+$ docker-machine ssh myvm1 "docker swarm init --advertise-addr 192.168.99.101
+> "
+Swarm initialized: current node (v0apq2v63q8jq6i7tm95h827j) is now a manager.
+
+To add a worker to this swarm, run the following command:
+
+    docker swarm join --token SWMTKN-1-1t9bv054sh001xe5jql5tru04eeqp37coqg3j13vhfjs3fgo9x-4aeeqx2ejgta054zbv08mds42 192.168.99.101
+:2377
+
+To add a manager to this swarm, run 'docker swarm join-token manager' and follow the instructions.
+
+
+
+$ docker-machine ssh myvm2 "docker swarm join \
+> --token SWMTKN-1-1t9bv054sh001xe5jql5tru04eeqp37coqg3j13vhfjs3fgo9x-4aeeqx2ejgta054zbv08mds42 192.168.99.101:2377"
+This node joined a swarm as a worker.
+
+$ docker-machine ssh myvm1 "docker node ls"
+ID                            HOSTNAME            STATUS              AVAILABILITY        MANAGER STATUS
+v0apq2v63q8jq6i7tm95h827j *   myvm1               Ready               Active              Leader
+pdgy2o9v971xlzcjnqsgly5rl     myvm2               Ready               Active
+
+
+
+
+
+
+
+destroying swarm
+
+docker-machine ssh myvm2 "docker swarm leave"
+
+docker-machine ssh myvm1 "docker swarm leave --force"
+
+docker-machine stop myvm2
+
+docker-machine stop myvm1
+
+docker-machine rm myvm2
+
+docker-machine rm myvm1
+
+
+
+
+
+turn shell to talk to leader
+docker-machine env myvm1
+
+eval $("D:\install\Docker Toolbox\docker-machine.exe" env myvm1)
+
+
+
+
+$ docker stack deploy -c docker-compose.yml firststack
+time="2017-10-07T15:47:57+05:30" level=info msg="Unable to use system certificate pool: crypto/x509: system root pool is not avail
+able on Windows"
+Creating network firststack_webnet
+Creating service firststack_hystrixdashboard
+Creating service firststack_catakogue
+Creating service firststack_visualizer
+Creating service firststack_discovery
+Creating service firststack_configserver
+Creating service firststack_gateway
+
+
+
+$ docker stack ps firststack
+time="2017-10-07T15:48:51+05:30" level=info msg="Unable to use system certificate pool: crypto/x509: system root pool is not avail
+able on Windows"
+ID            NAME                           IMAGE                               NODE   DESIRED STATE  CURRENT STATE   ERROR  PORTS
+5lxqay43bt6a  firststack_gateway.1           piyushdocker01/ref-gateway:0.0.1    myvm1  Running        Preparing about a minute ago
+mpzhqr8okp2z  firststack_configserver.1      piyushdocker01/ref-config:0.0.1     myvm1  Running        Preparing about a minute ago
+e1pmdu4or4kn  firststack_discovery.1         piyushdocker01/ref-discovery:0.0.1  myvm2  Running        Preparing 56 seconds ago
+mkjpp97zez81  firststack_visualizer.1        dockersamples/visualizer:stable     myvm1  Running        Preparing about a minute ago
+nqtqj2kldwjx  firststack_catakogue.1         piyushdocker01/ref-catalogue:0.0.2  myvm2  Running        Preparing 56 seconds ago
+g9lannapcd6c  firststack_hystrixdashboard.1  piyushdocker01/ref-hystrix:0.0.1    myvm2  Running        Preparing 56 seconds ago
+t98vnmewss30  firststack_catakogue.2         piyushdocker01/ref-catalogue:0.0.2  myvm1  Running        Preparing about a minute ago
+
+
+$ docker stack ps firststack
+time="2017-10-07T16:04:30+05:30" level=info msg="Unable to use system certificate pool: crypto/x509: system root pool is not avail
+able on Windows"
+ID            NAME                           IMAGE                               NODE   DESIRED STATE  CURRENT STATE	 ERROR  PORTS
+5lxqay43bt6a  firststack_gateway.1           piyushdocker01/ref-gateway:0.0.1    myvm1  Running        Running about a minute ago
+mpzhqr8okp2z  firststack_configserver.1      piyushdocker01/ref-config:0.0.1     myvm1  Running        Running about a minute ago
+e1pmdu4or4kn  firststack_discovery.1         piyushdocker01/ref-discovery:0.0.1  myvm2  Running        Running 3 minutes ago
+mkjpp97zez81  firststack_visualizer.1        dockersamples/visualizer:stable     myvm1  Running        Running 13 minutes ago
+nqtqj2kldwjx  firststack_catakogue.1         piyushdocker01/ref-catalogue:0.0.2  myvm2  Running        Running 3 minutes ago
+g9lannapcd6c  firststack_hystrixdashboard.1  piyushdocker01/ref-hystrix:0.0.1    myvm2  Running        Running 3 minutes ago
+t98vnmewss30  firststack_catakogue.2         piyushdocker01/ref-catalogue:0.0.2  myvm1  Running        Running about a minute ago
+
+
+
+$ docker stack ps firststack
+time="2017-10-07T16:08:36+05:30" level=info msg="Unable to use system certificate pool: crypto/x509: system root pool is not avail
+able on Windows"
+ID            NAME                           IMAGE                               NODE   DESIRED STATE  CURRENT STATE				 ERROR                PORTS
+4scjkxxpg2jc  firststack_discovery.1         piyushdocker01/ref-discovery:0.0.1  myvm2  Running        Preparing 14 seconds ago
+lwlb6aozh6w7  firststack_configserver.1      piyushdocker01/ref-config:0.0.1     myvm1  Running        Running about a minute ago
+pvyetze883l6  firststack_hystrixdashboard.1  piyushdocker01/ref-hystrix:0.0.1    myvm2  Running        Running 2 minutes ago
+5lxqay43bt6a  firststack_gateway.1           piyushdocker01/ref-gateway:0.0.1    myvm1  Running        Running 5 minutes ago
+mpzhqr8okp2z  firststack_configserver.1      piyushdocker01/ref-config:0.0.1     myvm1  Shutdown       Failed about a minute ago
+ "task: non-zero exit (139)"
+e1pmdu4or4kn  firststack_discovery.1         piyushdocker01/ref-discovery:0.0.1  myvm2  Shutdown       Failed 14 seconds ago
+ "task: non-zero exit (137)"
+mkjpp97zez81  firststack_visualizer.1        dockersamples/visualizer:stable     myvm1  Running        Running 17 minutes ago
+nqtqj2kldwjx  firststack_catakogue.1         piyushdocker01/ref-catalogue:0.0.2  myvm2  Running        Running 7 minutes ago
+g9lannapcd6c  firststack_hystrixdashboard.1  piyushdocker01/ref-hystrix:0.0.1    myvm2  Shutdown       Failed 3 minutes ago
+ "task: non-zero exit (139)"
+t98vnmewss30  firststack_catakogue.2         piyushdocker01/ref-catalogue:0.0.2  myvm1  Running        Running 6 minutes ago
+
+
+
+
+
+
+
+
+
+$ docker stack rm firststack
+time="2017-10-07T16:08:50+05:30" level=info msg="Unable to use system certificate pool: crypto/x509: system root pool is not avail
+able on Windows"
+Removing service firststack_discovery
+Removing service firststack_hystrixdashboard
+Removing service firststack_catakogue
+Removing service firststack_configserver
+Removing service firststack_visualizer
+Removing service firststack_gateway
+Removing network firststack_webnet
