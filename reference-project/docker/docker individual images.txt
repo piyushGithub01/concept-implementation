@@ -8,6 +8,10 @@ $ docker run -e "SPRING_PROFILES_ACTIVE=docker" -p 10000:10000 -t reference-proj
 
 $ docker run -e "SPRING_PROFILES_ACTIVE=docker" -p 7979:7979 -t reference-project/hystrix-dashboard
 
+zipkin	8383
+spring admin 	8384
+turbine 	8385
+
  
 
 $ docker images

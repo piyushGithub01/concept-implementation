@@ -1,0 +1,25 @@
+spring.profiles.active: dev
+logging.level.org.springframework.web: debug
+server:
+  port: 8383
+spring:
+  application:
+    name: zipkin-server
+---
+spring:
+  profiles: docker
+  cloud:
+    config:
+      uri: http://config-service:8381
+---
+spring:
+  profiles: dev
+  cloud:
+    config:
+      uri: http://localhost:8381
+---
+spring:
+  profiles: cloud
+  cloud:
+    config:
+      uri: ${vcap.services.config-service.credentials.uri:http://localhost:8381}

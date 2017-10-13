@@ -1,21 +1,13 @@
+management.security.enabled: false
 spring:
   profiles:
     active: dev
-
 ---
+
 spring:
   profiles: dev
-  boot.admin.url: http://localhost;8384
-  cloud:
-    config:
-      discovery:
-        enabled: true
-
 server:
-  port: 8380
-  
-management.security.enabled: false
-
+  port: 8384
 endpoints:
   restart:
     enabled: true
@@ -23,26 +15,25 @@ endpoints:
     enabled: true
   health:
     sensitive: false
-
 eureka:
   instance:
-    hostname: discovery
+    hostname: admin-dashboard
+    leaseRenewalIntervalInSeconds: 10
   client:
-    registerWithEureka: false
-    fetchRegistry: false
+    registerWithEureka: true
+    fetchRegistry: true
     serviceUrl:
       defaultZone: http://localhost:8380/eureka/
+ribbon:
+  eureka:
+    enabled: true
 
 ---
+
 spring:
   profiles: cloud
-  cloud:
-    config:
-      discovery:
-        enabled: true
-
 server:
-  port: 8380
+  port: 8384
 endpoints:
   restart:
     enabled: true
@@ -52,31 +43,30 @@ endpoints:
     sensitive: false
 eureka:
   instance:
-    hostname: discovery
+    hostname: admin-33.cfapps.io
+    leaseRenewalIntervalInSeconds: 10
   client:
-    registerWithEureka: false
-    fetchRegistry: false
+    registerWithEureka: true
+    fetchRegistry: true
     serviceUrl:
       defaultZone: http://discovery-77.cfapps.io/eureka/
 
 ---
+
 spring:
   profiles: docker
 server:
-  port: 8380
+  port: 8384
 endpoints:
   restart:
     enabled: true
   shutdown:
     enabled: true
   health:
-    sensitive: true
+    sensitive: false
 eureka:
-  instance:
-    hostname: discovery
-    preferIpAddress: true
   client:
-    registerWithEureka: true
-    fetchRegistry: false
     serviceUrl:
       defaultZone: http://192.168.99.100:8380/eureka/
+  instance:
+    preferIpAddress: true

@@ -5,6 +5,7 @@ spring:
 spring:
   profiles:
     name: dev
+  boot.admin.url: http://localhost:8384
   cloud:
     config:
       discovery:
@@ -16,6 +17,7 @@ server:
   port: 8381
 info:
   description: Config Server
+management.security.enabled: false
 ---
 spring:
   profiles:

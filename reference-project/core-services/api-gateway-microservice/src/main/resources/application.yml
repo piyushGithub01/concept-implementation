@@ -5,6 +5,12 @@ spring:
 
 spring:
   profiles: dev
+  boot.admin.url: http://localhost:8384
+  zipkin:
+    baseUrl: http://localhost:8383
+  sleuth:
+    sampler:
+      percentage: 1
 server:
   port: 10000
 endpoints:
@@ -29,11 +35,19 @@ ribbon:
       
 sidecar:
   port: 8000
+  
+management.security.enabled: false
 
 ---
 
 spring:
   profiles: cloud
+  boot.admin.url: http://admin-33.cfapps.io/
+  zipkin:
+    baseUrl: http://zipkin-22.cfapps.io/
+  sleuth:
+    sampler:
+      percentage: 1
 server:
   port: 10000
 endpoints:
@@ -60,6 +74,12 @@ sidecar:
 
 spring:
   profiles: docker
+  boot.admin.url: http://192.168.99.100:8384
+  zipkin:
+    baseUrl: http://192.168.99.100:8383
+  sleuth:
+    sampler:
+      percentage: 1
 server:
   port: 10000
 endpoints:

@@ -26,6 +26,10 @@
 		<module>config-microservice</module>
 		<module>api-gateway-microservice</module>
 		<module>hystrix-dashboard</module>
+		<module>admin-dashboard</module>
+		<module>turbine-dashboard</module>
+		<module>zipkin-tracing</module>
+		<module>auth-server</module>
 	</modules>
 	
 </project>

@@ -4,6 +4,12 @@ spring:
 ---
 spring:
   profiles: dev
+  boot.admin.url: http://localhost:8384
+  zipkin:
+    baseUrl: http://localhost:8383
+  sleuth:
+    sampler:
+      percentage: 1
   datasource:
     initialize: true
     schema: classpath:schema.sql
@@ -18,6 +24,8 @@ spring:
 server:
   port: 8386
 
+management.security.enabled: false
+
 eureka:
   client:
     serviceUrl:
@@ -29,6 +37,11 @@ ribbon:
 ---
 spring:
   profiles: cloud
+  zipkin:
+    baseUrl: http://zipkin-22.cfapps.io/
+  sleuth:
+    sampler:
+      percentage: 1
   datasource:
     initialize: true
     schema: classpath:schema.sql
@@ -57,6 +70,11 @@ ribbon:
 ---
 spring:
   profiles: docker
+  zipkin:
+    baseUrl: http://192.168.99.100:8383
+  sleuth:
+    sampler:
+      percentage: 1
   datasource:
     initialize: true
     schema: classpath:schema.sql
